@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+<style>
+   @media only screen and (max-width: 600px) {
+  label,input{
+    font-size: 10px;
+    width: 60%;
+  }
+  form{
+   padding: 1%;
+  }
+}
+    form{
+        background-color: rgb(240, 235, 253);
+        padding: 2%;
+        display: block;
+        width: max-content;
+        height: max-content;
+        top:0;left:0;bottom: 0;right: 0;
+        margin: auto;
+        position: absolute;
+        box-shadow: 5px 10px 80px #582664;;
+    }
+    label{
+        font-size: x-large;
+    }
+    input{
+        font-size: x-large;
+        margin-top: 33px;
+        border-style: none;
+        
+        padding: 12px;
+        background-color : rgb(187, 190, 206);
+    }
+    button{
+        border-style: none;
+        background-color: rgb(151, 113, 194);
+        padding: 8px;
+        cursor: pointer;
+        color: aliceblue;
+        margin-top : 19px;
+        display: block;
+        font-size: x-large;
+        width: 100%;
+        
+    }
+    button:hover {
+        color: black;
+        background-color: rgb(200, 155, 214);
+    }
+    a{
+        margin-top: 18px;
+    }
+</style>
+</head>
+
+<body style="background-color : rgb(191, 183, 235)">
+    <form >
+    
+       <label >Username</label>
+       <input id="username" type="text" placeholder="tommyshelby1032">
+       <br>
+       <label >Password </label>
+       <input id="password" type="password" placeholder="">
+       <br>
+       <button id="btn" >Log in</button>
+       <!-- <a href="/login">Already registered? Login</a> -->
+       <h2 id="msg"> </h2>
+    </form>
+    <script src="log.js"></script>  
+</body>
+
+</html>
