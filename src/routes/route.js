@@ -11,6 +11,8 @@ const route = express.Router();
 require('../database/connect');
 const db = require('../database/schemadb');
 const session = require('express-session');
+const mongoStore = require('connect-mongo');
+const auth = require('../routes/auth');
 
 route.use(express.static(path.join(__dirname,'../../public')));
 route.use(express.urlencoded({extended:false}));
@@ -19,11 +21,14 @@ route.use(session({
   resave : false,
   saveUninitialized:true,
   cookie:{maxAge : Number(process.env.AGE)},
-  secret: String(secret_key)
+  secret: String(secret_key),
+  store:mongoStore.create({mongoUrl : 'mongodb://localhost:27017/bluenotes'})
 }));
 
 route.get('/',(req,res) => {
-    res.send('<h1>Hello ji kaise ho ?<h1>');
+  console.log(req.session.token);
+  res.json({sessiond : req.session.token});
+   // res.send('<h1>Hello ji kaise ho ?<h1>');
 })
 //-------------Sign up--------------------
 route.get('/signup' , (req,res) =>{
@@ -62,7 +67,9 @@ route.post('/login',async (req,res) => {
       let token = jwt.sign({username : username},secret_key);
       req.session.token = token;
       
+      console.log(req.session);
       res.status(202).json({message : "access given",status:true});
+      
     }
     else
     res.status(401).json({message : "invalid username or password",status:false});
@@ -71,5 +78,32 @@ route.post('/login',async (req,res) => {
       res.status(404).json({message : "no such user found"});
     }
 });
+route.get('/user/:username', async (req,res) => {
 
+  res.sendFile(path.join(__dirname,"..",'../public/public-user/index.html'))
+})
+route.get('/api/:username',async (req,res) =>{
+  const currentUser = await db.findOne({username : req.params.username});
+  if(!currentUser)
+  res.status(404).json({message : "Oops ! no such user"});
+  else{
+     res.status(200).json({username : currentUser.username , links : currentUser.links});
+  }
+   
+});
+route.patch('/user/:username/edit',async (req,res) => {
+if(req.isValid || true){
+  const currentUser = await db.findOne({username : req.params.username});
+  if(!currentUser)
+  res.status(404).json({message : "Oops ! no such user"});
+  else{
+      currentUser.links = req.body.links;
+      currentUser.save();
+      res.status(201).json({message : "updated"})
+  }
+}
+else{
+  res.status(403).json({message : 'unauthorized'});
+}
+})
 module.exports = route;
