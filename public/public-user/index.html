@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user page</title>
+</head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+Thambi+2&family=Comfortaa&family=Montserrat:wght@200&family=Roboto+Condensed&display=swap');
+    body{
+        margin-top: 0;
+        margin-left: 0;
+        margin-right: 0;
+        font-family: 'Baloo Thambi 2', cursive;
+        font-weight: bold;
+    }
+    nav{
+        box-shadow: 2px 2px 15px rgb(0, 0, 0);
+        text-align: center;
+        font-size: x-large;
+        background-image: linear-gradient(90deg , rgb(126, 109, 165) ,rgb(64, 83, 165));
+        color: beige;
+        padding: 13px;
+        margin-top: 0;
+    }
+    ul{
+        padding: 5%;
+    }
+    li{
+        box-shadow: 2px 2px 15px rgb(0, 0, 0);
+        text-align: center;
+        margin-top: 12px;
+        list-style-type: none;
+        display: block;
+        padding: 12px;
+        background-image: linear-gradient(to right , rgb(50, 8, 88), rgb(114, 67, 114));
+        border-radius: 9px;
+        cursor: pointer;
+    }
+    li:hover{
+        box-shadow: 2px 2px 15px rgb(92, 80, 197);
+        color: aqua;
+        background-image: linear-gradient(to right , rgb(206, 181, 228)rgb(156, 102, 156));
+    }
+    li a{
+        text-decoration: none;
+        font-size: 1.5rem;
+        color: rgb(224, 223, 205);
+    }
+    li a:hover{
+        color: rgb(130, 194, 231);
+    }
+   #edit{
+    float : right;
+    border-style: none;
+    background-color: rgb(16, 3, 36);
+    box-shadow: 1px 2px 20px rgb(173, 204, 214);
+    color: azure;
+    padding: 8px 22px 8px 22px;
+    cursor :pointer;
+    border-radius: 9px;
+    font-variation-settings:
+   'FILL' 0,
+   'wght' 400,
+   'GRAD' 0,
+   'opsz' 48
+    }
+    #edit:hover {
+        box-shadow: 1px 2px 20px rgb(141, 124, 156);
+    }
+</style>
+<body>
+ <nav>
+    <span id="username">username</span>    
+    <button id="edit">
+        <img src="118098.png" alt="edit" srcset="">
+    </button>
+ </nav>
+ <ul id = "content">
+    
+ </ul>
+<script>
+    const content = document.getElementById("content");
+    const username = document.getElementById("username");
+    const url = window.location.href;
+    const param =url.slice(url.lastIndexOf('/')+1);
+    console.log(param);
+    async function loadContents(current_url){
+      await fetch(current_url)
+      .then(res => res.json())
+      .then((res) => {
+        console.log(res)
+        username.innerText = res.username;
+         res.links.forEach(element => {
+            let list = document.createElement('li');
+            list.innerHTML = `<a href="https://www.${element.link}" target="_blank">${element.name}</a>`;
+            content.appendChild(list);
+        }
+        );
+      })
+    
+    }
+    loadContents(`/api/${param}`);
+    </script>
+</body>
+</html>
