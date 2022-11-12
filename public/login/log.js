@@ -21,7 +21,7 @@ async function authUser(event){
       .then(res => res.json())
       .then((data) => {
         if(data.status)
-        location.href = "/";
+        location.href = `/user/${username.value}`
         else
         msg.innerText = data.message;
       })  

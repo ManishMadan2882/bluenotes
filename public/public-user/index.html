@@ -17,10 +17,11 @@
         font-weight: bold;
     }
     nav{
+
         box-shadow: 2px 2px 15px rgb(0, 0, 0);
         text-align: center;
         font-size: x-large;
-        background-image: linear-gradient(90deg , rgb(126, 109, 165) ,rgb(64, 83, 165));
+        background-image: linear-gradient(180deg , rgb(68, 43, 126) ,rgb(52, 25, 116));
         color: beige;
         padding: 13px;
         margin-top: 0;
@@ -28,7 +29,8 @@
     ul{
         padding: 5%;
     }
-    li{
+    li{list-style: none;}
+    li a{
         box-shadow: 2px 2px 15px rgb(0, 0, 0);
         text-align: center;
         margin-top: 12px;
@@ -38,52 +40,51 @@
         background-image: linear-gradient(to right , rgb(50, 8, 88), rgb(114, 67, 114));
         border-radius: 9px;
         cursor: pointer;
-    }
-    li:hover{
-        box-shadow: 2px 2px 15px rgb(92, 80, 197);
-        color: aqua;
-        background-image: linear-gradient(to right , rgb(206, 181, 228)rgb(156, 102, 156));
-    }
-    li a{
         text-decoration: none;
         font-size: 1.5rem;
-        color: rgb(224, 223, 205);
+        color: rgb(255, 255, 255);
+   
     }
     li a:hover{
-        color: rgb(130, 194, 231);
+        box-shadow: 2px 2px 15px rgb(92, 80, 197);
+        color: rgb(148, 156, 230);
+        background-image: linear-gradient(to right , rgb(206, 181, 228)rgb(156, 102, 156));
     }
+   
    #edit{
     float : right;
     border-style: none;
-    background-color: rgb(16, 3, 36);
-    box-shadow: 1px 2px 20px rgb(173, 204, 214);
+    background-color: rgb(42, 30, 58);
+    box-shadow: 1px 2px 20px rgb(0, 0, 0);
     color: azure;
     padding: 8px 22px 8px 22px;
     cursor :pointer;
     border-radius: 9px;
-    font-variation-settings:
-   'FILL' 0,
-   'wght' 400,
-   'GRAD' 0,
-   'opsz' 48
+    border: 0.5px solid white;
+    font-size: 1rem;
+    display: none;
     }
     #edit:hover {
-        box-shadow: 1px 2px 20px rgb(141, 124, 156);
+        border: 1px solid rgb(141, 124, 156);
+        color: rgb(141, 124, 156);
+        
     }
 </style>
 <body>
  <nav>
     <span id="username">username</span>    
     <button id="edit">
-        <img src="118098.png" alt="edit" srcset="">
+        E D I T
     </button>
  </nav>
  <ul id = "content">
     
  </ul>
+ <button onclick="shareLink()" id="share">Share</button>
 <script>
     const content = document.getElementById("content");
     const username = document.getElementById("username");
+    const editBtn = document.getElementById('edit');
     const url = window.location.href;
     const param =url.slice(url.lastIndexOf('/')+1);
     console.log(param);
@@ -93,16 +94,24 @@
       .then((res) => {
         console.log(res)
         username.innerText = res.username;
+        const isEditable =  res.isEditable;
+         if(isEditable)
+         editBtn.style.display = 'block';
+
          res.links.forEach(element => {
             let list = document.createElement('li');
-            list.innerHTML = `<a href="https://www.${element.link}" target="_blank">${element.name}</a>`;
+            list.innerHTML = `<a href="${element.link}" target="_blank">${element.name}</a>`;
             content.appendChild(list);
         }
         );
       })
     
     }
+    async function shareLink(){
+        await navigator.share({url : location.href})
+    }
     loadContents(`/api/${param}`);
-    </script>
+    editBtn.addEventListener('click',() => {location.href = `/edit/${param}`})
+</script>
 </body>
 </html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit here</title>
+</head>
+<style>
+    img{
+        width: 25px;
+    }
+#comp{
+    display: flex;
+
+}
+
+input{
+    display: block;
+    border-style: none;
+    margin: auto;
+    margin-left: 13px ;
+    margin-right: 26px;
+    margin-top: 12px;
+    padding: 3.5%;
+}
+input:focus{outline: none;}
+.note{
+    display: block;
+    margin: auto;
+    padding-top: 1% ;
+    border: none;
+    background-color: rgb(36, 22, 53);
+    width: max-content;
+    box-shadow: 1px 1px 20px black;
+}
+.add,.del{
+    color: white;
+    width: 100%;
+    border: none;
+    font-size: 1.5rem;
+    margin-top: 25px;
+    background-color: royalblue;
+    cursor: pointer;
+}
+#save:hover , .add:hover, .del:hover{
+    background-image: linear-gradient(to right , rgb(78, 126, 158) ,rgb(63, 63, 172));
+}
+.url{
+    margin-top: 20px;
+}
+#save{
+   margin: auto; 
+   display: block;
+   padding: 12px;
+   width: 180px;
+   color: white;
+   margin-bottom: 30px;
+    border: none;
+    font-size: 1rem;
+    box-shadow: 1px 1px 20px rgb(0, 0, 0);
+    margin-top: 25px;
+    background-color: rgb(58, 124, 133);
+    cursor: pointer;
+}
+#section{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    
+}
+.draft{
+    display: block;
+    margin-top: 30px;
+    padding-top: 1% ;
+    border: none;
+    background-color: rgb(38, 66, 71);
+    width: max-content;
+    box-shadow: 1px 1px 20px rgb(36, 39, 39)
+}
+body{
+    background-color: rgb(142, 212, 212);
+}
+</style>
+<body>
+    <button onclick="save()" id="save" title="Save document">SAVE</button>
+    <div class="note">
+        <input class="linkName" type="text" placeholder="Link name">
+        <input class="url" type="text" placeholder="URL">
+        <button  title="Add a new note" class="add">+</button>
+    </div>
+    <div id="section">
+    </div>
+    <script>
+
+        const params = (location.href).split('/');
+        const param = params[params.length - 1]
+        console.log(param);
+        const linkname = document.getElementsByClassName('linkName')
+        const url = document.getElementsByClassName('url'); 
+        const section = document.getElementById('section');
+        const del = document.getElementsByClassName('del');
+        const draft_class = document.getElementsByClassName('draft');
+        var draft ;
+        const add = document.getElementsByClassName('add')[0];
+        add.addEventListener('click' ,  addNote);
+        loadContents(`/api/${param}`);
+        function addNote(){
+            console.log(url[0]);
+              const link_name = linkname[0].value, link_url = url[0].value;
+              const newOne  = document.createElement('div');
+              newOne.className = 'draft';
+              newOne.innerHTML = `
+              <input value="${link_name}" class="linkName" type="text" placeholder="Link name">
+              <input value="${link_url}" class="url" type="text" placeholder="URL">
+              <button title="Delete note" onclick = "deleteNote(event)" class="del"><img src="delete.png" alt="delete"></button>
+              `; 
+              section.appendChild(newOne);
+              draft = document.getElementsByClassName('draft');
+              linkname[0].value="";0
+              url[0].value="";                
+
+        }
+        function deleteNote(event){
+            console.log(event.target.parentElement)
+          event.target.parentElement.remove();
+        }
+       async  function loadContents(current_url){
+        await fetch(current_url)
+      .then(res => res.json())
+      .then((res) => {
+        console.log(res)
+        const isEditable =  res.isEditable;
+         if(!isEditable)
+         document.body.innerHTML = '<h1> Document connot be edited </h1>';     
+         res.links.forEach(element => {
+            let list = document.createElement('div')
+            list.className = 'draft';
+            list.innerHTML = `
+              <input value="${element.name}" class="linkName"  type="text" placeholder="Link name">
+              <input value="${element.link}" class="url"       type="text" placeholder="URL">
+              <button title="Delete note" onclick = "deleteNote(event)" class="del"><img src="https://img.icons8.com/office/16/null/delete--v1.png"/></button>
+              `; 
+               section.appendChild(list);
+        }
+        );
+      })
+    
+    }
+    async function save(){
+    let arr  = new Array();
+     for (let index = 1; index <= draft_class.length; index++) {
+        
+        let name = linkname[index].value;
+        let link =url[index].value;
+        let object = {
+            link:link,name:name
+        }
+       arr.push(object);        
+     }
+     await fetch(`/api/${param}/edit`,{
+        method: "PATCH",
+        headers: {'Content-Type': 'application/json'}, 
+        body: JSON.stringify({links:arr})
+     }).then(res => res.json())
+     .then((data) => console.log(data.message)); 
+
+    }
+    </script>
+</body>
+
+</html>
