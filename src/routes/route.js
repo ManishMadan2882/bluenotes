@@ -26,8 +26,9 @@ route.use(session({
 }));
 
 route.get('/',(req,res) => {
-  console.log(req.session.token);
-  res.json({sessiond : req.session.token});
+  res.status(200).sendFile(path.join(__dirname,"../../public/home/index.html"));
+ // console.log(req.session.token);
+
    // res.send('<h1>Hello ji kaise ho ?<h1>');
 })
 //-------------Sign up--------------------
@@ -78,21 +79,31 @@ route.post('/login',async (req,res) => {
       res.status(404).json({message : "no such user found"});
     }
 });
+
+route.get('/edit/:username',auth, (req,res) => {
+  res.status(200).sendFile(path.join(__dirname,"..",'../public/editFolder/index.html'))
+});
 route.get('/user/:username', async (req,res) => {
 
   res.sendFile(path.join(__dirname,"..",'../public/public-user/index.html'))
 })
 route.get('/api/:username',async (req,res) =>{
   const currentUser = await db.findOne({username : req.params.username});
+  const editableUsername = jwt.decode(req.session.token,secret_key).username;
   if(!currentUser)
   res.status(404).json({message : "Oops ! no such user"});
   else{
-     res.status(200).json({username : currentUser.username , links : currentUser.links});
+     if(editableUsername === currentUser.username)
+     res.status(200).json({username : currentUser.username , links : currentUser.links, isEditable : true});
+     else
+     res.status(200).json({username : currentUser.username , links : currentUser.links, isEditable : false});
+     
+
   }
    
 });
-route.patch('/user/:username/edit',async (req,res) => {
-if(req.isValid || true){
+route.patch('/api/:username/edit',auth,async (req,res) => {
+if(req.isValid ){
   const currentUser = await db.findOne({username : req.params.username});
   if(!currentUser)
   res.status(404).json({message : "Oops ! no such user"});
