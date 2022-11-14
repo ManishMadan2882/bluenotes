@@ -7,14 +7,22 @@
     <title>Edit here</title>
 </head>
 <style>
+    #back{
+        float: left;
+        font-size: 2rem;
+        border:none;
+        border-radius: 10px;
+        cursor: pointer;
+        color: white;
+        position: absolute;
+    background-image: linear-gradient(to right , rgb(78, 126, 158) ,rgb(63, 63, 172));
+    }
     img{
         width: 25px;
     }
 #comp{
     display: flex;
-
 }
-
 input{
     display: block;
     border-style: none;
@@ -50,6 +58,7 @@ input:focus{outline: none;}
     margin-top: 20px;
 }
 #save{
+
    margin: auto; 
    display: block;
    padding: 12px;
@@ -83,6 +92,7 @@ body{
 }
 </style>
 <body>
+    <button onclick="goBack()" id="back">←</button>
     <button onclick="save()" id="save" title="Save document">SAVE</button>
     <div class="note">
         <input class="linkName" type="text" placeholder="Link name">
@@ -106,7 +116,6 @@ body{
         add.addEventListener('click' ,  addNote);
         loadContents(`/api/${param}`);
         function addNote(){
-            console.log(url[0]);
               const link_name = linkname[0].value, link_url = url[0].value;
               const newOne  = document.createElement('div');
               newOne.className = 'draft';
@@ -119,17 +128,14 @@ body{
               draft = document.getElementsByClassName('draft');
               linkname[0].value="";0
               url[0].value="";                
-
         }
         function deleteNote(event){
-            console.log(event.target.parentElement)
           event.target.parentElement.remove();
         }
        async  function loadContents(current_url){
         await fetch(current_url)
       .then(res => res.json())
       .then((res) => {
-        console.log(res)
         const isEditable =  res.isEditable;
          if(!isEditable)
          document.body.innerHTML = '<h1> Document connot be edited </h1>';     
@@ -165,6 +171,9 @@ body{
      }).then(res => res.json())
      .then((data) => console.log(data.message)); 
 
+    }
+    function goBack(){
+        location.href = `/user/${param}`;
     }
     </script>
 </body>

@@ -22,21 +22,17 @@ route.use(session({
   saveUninitialized:true,
   cookie:{maxAge : Number(process.env.AGE)},
   secret: String(secret_key),
-  store:mongoStore.create({mongoUrl : 'mongodb://localhost:27017/bluenotes'})
+  store:mongoStore.create({mongoUrl : process.env.mongourl})
 }));
 
-route.get('/',(req,res) => {
+route.get('/',auth,(req,res) => {
   res.status(200).sendFile(path.join(__dirname,"../../public/home/index.html"));
- // console.log(req.session.token);
-
-   // res.send('<h1>Hello ji kaise ho ?<h1>');
 })
 //-------------Sign up--------------------
 route.get('/signup' , (req,res) =>{
  res.status(200).sendFile(path.join(__dirname,"../../public/signup/index.html"));
 });
 route.post('/signup', async (req,res) => {
-    console.log(req.body);
   try{
     const username=req.body.username;
     const password=await bcrypt.hash(req.body.password,salt);
@@ -81,10 +77,11 @@ route.post('/login',async (req,res) => {
 });
 
 route.get('/edit/:username',auth, (req,res) => {
+  if(req.isValid)
   res.status(200).sendFile(path.join(__dirname,"..",'../public/editFolder/index.html'))
+  else res.redirect(`/user/${req.params.username}`);
 });
 route.get('/user/:username', async (req,res) => {
-
   res.sendFile(path.join(__dirname,"..",'../public/public-user/index.html'))
 })
 route.get('/api/:username',async (req,res) =>{

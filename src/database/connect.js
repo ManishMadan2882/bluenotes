@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 const mongoose = require('mongoose');
 
-module.exports = mongoose.connect('mongodb://localhost:27017/bluenotes')
+module.exports = mongoose.connect(process.env.mongourl)
 .then( () => {
     console.log("Connection with database : success");
 }) 

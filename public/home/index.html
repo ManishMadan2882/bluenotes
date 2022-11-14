@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bluenotes</title>
+</head>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
+<style>
+    body{
+        background-color: rgb(155, 156, 241);
+        font-family: 'Comfortaa', cursive;
+    }
+    #heading
+    {
+           
+        font-size: 2.5rem;
+        font-weight: bold;
+        padding: 5%;
+    }
+    #sub-heading{
+        text-shadow: 5px 5px 20px rgb(0, 0, 0);
+        color: rgb(255, 255, 255);
+        font-size: 1.5rem;
+    }
+    
+    h1{
+        text-align: center;
+        display: block;
+        margin: auto;
+    }
+    #user
+    {
+        margin-top: 50px;
+        text-align: center;
+    }
+    #signup, #login{
+        /* border: 3px solid black; */
+        padding: 20px;
+        padding-inline: 7%;
+        text-decoration: none;
+        color: aqua;
+        font-size: x-large;
+        cursor: pointer;
+        background-color: black;
+        box-shadow: 1px 1px 25px black;
+    }
+    #signup:hover, #login:hover{
+        background-color: rgb(56, 58, 57);
+    }
+    #signup{
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+    }
+    #login{
+        color: aquamarine;
+        border-top-right-radius: 50px;
+        border-bottom-right-radius: 50px;       
+    }
+</style>
+<body>
+    <h1 id="heading">One link for Everyone</h1>
+    <h1 id="sub-heading">Share freely to your <br> friends, audiences<br>, followers, and ...</h1>
+    <div id="user">
+        <a id="signup" href="/signup">Sign up</a>
+        <a id= "login" href="/login">Log in</a>
+    </div>
+    <h3 style="text-align: center;margin:50px;">Generate a link to share</h3> 
+</body>
+</html>

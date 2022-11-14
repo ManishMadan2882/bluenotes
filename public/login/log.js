@@ -1,4 +1,3 @@
-
 const btn = document.getElementById('btn');
 const username = document.getElementById('username');
 const password = document.getElementById('password');
@@ -12,7 +11,6 @@ async function authUser(event){
       username : username.value,
       password : password.value
     } ;
-    console.log(data);
     await fetch("/login", {
         method: "POST",
         headers: {'Content-Type': 'application/json'}, 

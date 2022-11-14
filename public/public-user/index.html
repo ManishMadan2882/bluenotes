@@ -16,6 +16,7 @@
         font-family: 'Baloo Thambi 2', cursive;
         font-weight: bold;
     }
+    #username{}
     nav{
 
         box-shadow: 2px 2px 15px rgb(0, 0, 0);
@@ -50,8 +51,7 @@
         color: rgb(148, 156, 230);
         background-image: linear-gradient(to right , rgb(206, 181, 228)rgb(156, 102, 156));
     }
-   
-   #edit{
+   #edit,#share{
     float : right;
     border-style: none;
     background-color: rgb(42, 30, 58);
@@ -64,7 +64,14 @@
     font-size: 1rem;
     display: none;
     }
-    #edit:hover {
+
+   #share{
+    width: 120px;
+     margin-left: 20px;
+    display: block;
+   }
+   
+    #edit:hover,#share:hover {
         border: 1px solid rgb(141, 124, 156);
         color: rgb(141, 124, 156);
         
@@ -72,27 +79,26 @@
 </style>
 <body>
  <nav>
-    <span id="username">username</span>    
+    <span id="username">username</span>
+    <button onclick="shareLink()" id="share">Copy URL</button>    
     <button id="edit">
         E D I T
     </button>
+
  </nav>
  <ul id = "content">
     
  </ul>
- <button onclick="shareLink()" id="share">Share</button>
 <script>
     const content = document.getElementById("content");
     const username = document.getElementById("username");
     const editBtn = document.getElementById('edit');
     const url = window.location.href;
     const param =url.slice(url.lastIndexOf('/')+1);
-    console.log(param);
     async function loadContents(current_url){
       await fetch(current_url)
       .then(res => res.json())
       .then((res) => {
-        console.log(res)
         username.innerText = res.username;
         const isEditable =  res.isEditable;
          if(isEditable)
@@ -107,8 +113,9 @@
       })
     
     }
-    async function shareLink(){
-        await navigator.share({url : location.href})
+    function shareLink(){
+        navigator.clipboard.writeText(url);
+        document.getElementById('share').innerHTML = 'Copied'; 
     }
     loadContents(`/api/${param}`);
     editBtn.addEventListener('click',() => {location.href = `/edit/${param}`})

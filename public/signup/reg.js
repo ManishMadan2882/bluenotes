@@ -12,7 +12,6 @@ async function postUser(event){
       username : username.value,
       password : password.value
     } ;
-    console.log(data);
     await fetch("/signup", {
         method: "POST",
         headers: {'Content-Type': 'application/json'}, 
