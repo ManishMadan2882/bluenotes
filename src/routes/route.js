@@ -4,7 +4,6 @@ const path = require('path');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const secret_key = process.env.SECRET_KEY;
-
 const salt = Number(process.env.SALT);
 const jwt = require('jsonwebtoken');
 const route = express.Router();
@@ -13,7 +12,6 @@ const db = require('../database/schemadb');
 const session = require('express-session');
 const mongoStore = require('connect-mongo');
 const auth = require('../routes/auth');
-
 route.use(express.static(path.join(__dirname,'../../public')));
 route.use(express.urlencoded({extended:false}));
 route.use(express.json());
@@ -63,8 +61,6 @@ route.post('/login',async (req,res) => {
       
       let token = jwt.sign({username : username},secret_key);
       req.session.token = token;
-      
-      console.log(req.session);
       res.status(202).json({message : "access given",status:true});
       
     }
