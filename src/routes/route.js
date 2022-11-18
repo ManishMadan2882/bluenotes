@@ -82,10 +82,19 @@ route.get('/user/:username', async (req,res) => {
 })
 route.get('/api/:username',async (req,res) =>{
   const currentUser = await db.findOne({username : req.params.username});
-  const editableUsername = jwt.decode(req.session.token,secret_key).username;
   if(!currentUser)
   res.status(404).json({message : "Oops ! no such user"});
   else{
+     
+    let editableUsername = "";
+    try{
+      editableUsername = jwt.decode(req.session.token,secret_key).username;
+    }
+    catch(error){
+      return res.status(200).json({username : currentUser.username , links : currentUser.links, isEditable : false});
+ 
+    }
+
      if(editableUsername === currentUser.username)
      res.status(200).json({username : currentUser.username , links : currentUser.links, isEditable : true});
      else
