@@ -23,7 +23,7 @@ route.use(session({
   store:mongoStore.create({mongoUrl : process.env.mongourl})
 }));
 
-route.get('/',auth,(req,res) => {
+route.get('/',(req,res) => {
   res.status(200).sendFile(path.join(__dirname,"../../public/home/index.html"));
 })
 //-------------Sign up--------------------
