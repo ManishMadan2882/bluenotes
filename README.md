@@ -13,7 +13,7 @@
  5. JWT
  6. dotenv
 
-#Features
+# Features
 * Users can create their link note and share it on social media.
 * Each link note contains the original URL and its name.
 * Copy that link and feel free to share.
@@ -27,4 +27,4 @@
 
 ## Feedback
 If you encounter any bugs or have any suggestions for improvements, please open an issue on the GitHub repository.
-Feel free to create issues and Contribute to this repo.
+Feel free to Contribute to this repo 🙏
